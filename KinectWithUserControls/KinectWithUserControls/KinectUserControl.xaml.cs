@@ -19,22 +19,24 @@ namespace KinectWithUserControls
     /// <summary>
     /// Interaction logic for KinectUserControl.xaml
     /// </summary>
-    public partial class KinectUserControl : UserControl
+    /// When you try to inherit form kinect control you will get an Error in compilation. Look at the declaration of this control in XAML
+    /// also look at this (http://geekswithblogs.net/lbugnion/archive/2007/03/02/107747.aspx) blog post to know how to inherit your UserControl from anothe class
+    public partial class KinectUserControl : KinectControl
     {
         // the user control need to expose a KinectSensor property to be binded, right?
         // i preffer to expose a KinectSensor than KinectSensorManager
-        public static readonly DependencyProperty KinectSensorProperty =
-            DependencyProperty.Register(
-                "KinectSensor",
-                typeof(KinectSensor),
-                typeof(KinectUserControl),
-                new PropertyMetadata(null));
+        //public static readonly DependencyProperty KinectSensorProperty =
+        //    DependencyProperty.Register(
+        //        "KinectSensor",
+        //        typeof(KinectSensor),
+        //        typeof(KinectUserControl),
+        //        new PropertyMetadata(null));
 
-        public KinectSensor KinectSensor
-        {
-            get { return (KinectSensor)GetValue(KinectSensorProperty); }
-            set { SetValue(KinectSensorProperty, value); }
-        }
+        //public KinectSensor KinectSensor
+        //{
+        //    get { return (KinectSensor)GetValue(KinectSensorProperty); }
+        //    set { SetValue(KinectSensorProperty, value); }
+        //}
 
 
 
@@ -43,6 +45,7 @@ namespace KinectWithUserControls
         public KinectUserControl()
         {           
             InitializeComponent();
+
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -50,8 +53,11 @@ namespace KinectWithUserControls
             // this type of attribuition is possible?
             //ColorViewer.KinectSensorManager = someKinectSensorManager;
 
-            this.KinectSensor.ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(KinectSensor_ColorFrameReady);
-            this.KinectSensor.AllFramesReady += new EventHandler<AllFramesReadyEventArgs>(KinectSensor_AllFramesReady);
+            //this.KinectSensor.ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(KinectSensor_ColorFrameReady);
+           // this.KinectSensor.AllFramesReady += new EventHandler<AllFramesReadyEventArgs>(KinectSensor_AllFramesReady);
+
+            this.KinectSensorManager.KinectSensor.AllFramesReady += new EventHandler<AllFramesReadyEventArgs>(KinectSensor_AllFramesReady);
+            this.KinectSensorManager.KinectSensor.ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(KinectSensor_ColorFrameReady);
         }
 
         void KinectSensor_AllFramesReady(object sender, AllFramesReadyEventArgs e)

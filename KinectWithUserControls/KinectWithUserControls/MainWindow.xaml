@@ -19,7 +19,7 @@
             <!--I Know, we need to send (bind) a KinectSensor here, so the user control will pass it to the viewer.
             
             -->
-            <my:KinectUserControl HorizontalAlignment="Center" VerticalAlignment="Top"  x:Name="kinectUserControl1"  />
+            <my:KinectUserControl HorizontalAlignment="Center" KinectSensorManager="{Binding KinectSensorManager}" VerticalAlignment="Top"  x:Name="kinectUserControl1"  />
         </StackPanel>
 
     </Grid>

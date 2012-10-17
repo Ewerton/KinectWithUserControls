@@ -24,7 +24,8 @@ namespace KinectWithUserControls
     {
         // Declare a SensorChooser from KinectToolkit and  and a SensorManager from Samples.Kinect.WpfViewers
         // Is possíble to use only one ?
-        KinectSensorChooser SensorChooser = new KinectSensorChooser();
+        private readonly KinectSensorChooser SensorChooser = new KinectSensorChooser();
+        public KinectSensorManager KinectSensorManager { get; private set; }
 
         public MainWindow()
         {
@@ -33,10 +34,24 @@ namespace KinectWithUserControls
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.SensorChooser.KinectChanged += new EventHandler<KinectChangedEventArgs>(SensorChooser_KinectChanged);
+            // initialize the Kinect sensor manager
+            KinectSensorManager = new KinectSensorManager();
+            KinectSensorManager.KinectSensorChanged += new EventHandler<KinectSensorManagerEventArgs<KinectSensor>>(KinectSensorManager_KinectSensorChanged);
+
+
+            //this.SensorChooser.KinectChanged += new EventHandler<KinectChangedEventArgs>(SensorChooser_KinectChanged);
 
             // Starts the Kinect discovering process.
             this.SensorChooser.Start();
+
+            // bind chooser's sensor value to the local sensor manager
+            var kinectSensorBinding = new Binding("Kinect") { Source = this.SensorChooser };
+            BindingOperations.SetBinding(this.KinectSensorManager, KinectSensorManager.KinectSensorProperty, kinectSensorBinding);
+        }
+
+        void KinectSensorManager_KinectSensorChanged(object sender, KinectSensorManagerEventArgs<KinectSensor> e)
+        {
+            //throw new NotImplementedException();
         }
 
         void SensorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -103,7 +118,8 @@ namespace KinectWithUserControls
 
             //Where i need to write the code that sends the sensor information (color stream, sekeleton stream, etc) to the 
             // user control? Here?
-            kinectUserControl1.KinectSensor = this.SensorChooser.Kinect;
+            kinectUserControl1.KinectSensorManager = new KinectSensorManager();
+            kinectUserControl1.KinectSensorManager = this.KinectSensorManager;
 
         }
 
